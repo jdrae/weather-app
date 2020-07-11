@@ -1,3 +1,5 @@
+//configuration file that expo will read.
+
 {
   "expo": {
     "name": "weather-app",
