@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Alert } from 'react-native';
 
-import Loading from "./Loading";
+import Loading from "./js/Loading";
 import * as Location from "expo-location";
 import axios from "axios";
-import Weather from './Weather';
+import Weather from './js/Weather';
 
 const API_KEY = "e0f945dce213c94957833ea83d0d1b8f";
 
