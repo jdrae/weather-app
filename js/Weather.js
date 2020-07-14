@@ -5,6 +5,8 @@ import { Feather } from '@expo/vector-icons' //icons
 import {LinearGradient} from 'expo-linear-gradient' //gradient
 import { StatusBar } from "expo-status-bar"; //statusbar
 import {weatherOptions} from './Options'
+import Time from './Time'
+
 
 export default function Weather({ temp, condition }) { //{temp}
     return (
@@ -13,6 +15,7 @@ export default function Weather({ temp, condition }) { //{temp}
             style={styles.container}
         >
             <StatusBar barStyle="light-content"/>
+            <Time style={styles.textContainer}></Time>
             <View style={styles.halfContainer}>
                 <Feather name={weatherOptions[condition].iconName} style={styles.icon}/>
                 <Text style={styles.temp}>{temp}°</Text>
@@ -54,7 +57,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     halfContainer: {
-        flex: 1,
+        flex: 3,
         justifyContent: "center",
         alignItems: "center"
     },
