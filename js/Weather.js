@@ -1,34 +1,67 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableHighlightBase } from "react-native";
 import PropTypes from "prop-types";
 import { Feather } from '@expo/vector-icons' //icons
 import {LinearGradient} from 'expo-linear-gradient' //gradient
 import { StatusBar } from "expo-status-bar"; //statusbar
+import axios from "axios"; //await
 import {weatherOptions} from './Options'
 import Time from './Time'
+import {API_KEY} from './env'
 
+export default class Weather extends React.Component{
+    constructor(props){
+        super(props);
+        this.getWeather(props.lat,props.long);
+    }
 
-export default function Weather({ temp, condition }) { //{temp}
-    return (
-        <LinearGradient 
-            colors={weatherOptions[condition].gradient}
-            style={styles.container}
-        >
-            <StatusBar barStyle="light-content"/>
-            <Time style={styles.textContainer}></Time>
-            <View style={styles.halfContainer}>
-                <Feather name={weatherOptions[condition].iconName} style={styles.icon}/>
-                <Text style={styles.temp}>{temp}°</Text>
-            </View>
-            <View style={styles.textContainer}> 
-                <Text style={styles.title}>{weatherOptions[condition].title}</Text>
-                <Text style={styles.subtitle}>{weatherOptions[condition].subtitle}</Text>
-            </View>
+    state = { //is default value needed?
+        condition: "Clear",
+        temp: 23
+    }
+
+    getWeather = async (latitude, longitude) => {
+        const { 
+            data: {
+                main: {temp},
+                weather
+            }
+        } = await axios.get(
+          `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+        );
+        this.setState({
+            condition: weather[0].main,
+            temp: temp
+        })
+        console.log(this.state.condition);
+    }
+
+    render(){ // how to dealy rendering while getting api data
+        const { temp,condition } = this.state;
+        return (
             
-        </LinearGradient>
-    );
+            <LinearGradient 
+                colors={weatherOptions[condition].gradient}
+                style={styles.container}
+            >
+                <StatusBar barStyle="light-content"/>
+                <Time style={styles.textContainer}></Time>
+                <View style={styles.halfContainer}>
+                    <Feather name={weatherOptions[condition].iconName} style={styles.icon}/>
+                   <Text style={styles.temp}>{temp}°</Text>
+                </View>
+                <View style={styles.textContainer}> 
+                    <Text style={styles.title}>{weatherOptions[condition].title}</Text>
+                    <Text style={styles.subtitle}>{weatherOptions[condition].subtitle}</Text>
+                </View>
+                
+            </LinearGradient>
+            
+        );
+    }
 }
 
+/*
 Weather.propTypes = {
     temp: PropTypes.number.isRequired,
     condition: PropTypes.oneOf([
@@ -50,6 +83,7 @@ Weather.propTypes = {
         "Tornado"
     ]).isRequired
 };
+*/
 
 const styles = StyleSheet.create({
     container: {
@@ -86,4 +120,3 @@ const styles = StyleSheet.create({
         flex: 1
       }
 })
-
