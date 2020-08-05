@@ -1,16 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 
-let date = new Date();
-
-export default function Time(){
-    return (
-        <View style={styles.textContainer}>
-            <Text style = {styles.datestyle}>{date.getMonth()}월 {date.getDate()}일 {date.getHours()}:{date.getMinutes()}</Text>
-        </View>
-    );
-}
-
 const styles = StyleSheet.create({
     datestyle:{
         color:"white",
@@ -23,3 +13,38 @@ const styles = StyleSheet.create({
         flex: 1
     }
 })
+
+export default class Time extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {date: new Date()}
+    }
+
+    componentDidMount(){
+        this.timerID = setInterval(
+            () => this.tick(),
+            1000
+        );
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.timerID)
+    }
+
+    tick(){
+        this.setState({
+            date: new Date()
+        });
+    }
+
+    render(){
+        return(
+            <View style={styles.textContainer}>
+            <Text style = {styles.datestyle}>
+                {this.state.date.getMonth()}월 {this.state.date.getDate()}일 {this.state.date.getHours()}:{this.state.date.getMinutes()}
+            </Text>
+            </View>
+        );
+    }
+
+}
